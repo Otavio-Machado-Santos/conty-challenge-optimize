@@ -1,0 +1,57 @@
+{
+  "id": 2,
+  "reviewed_sha": "c474b676e8f4665d34a2785a9ef07cc0a6d00d5e",
+  "publication_sha": "ba0963ca866b7cd952c899d62cae45091a9fe5b8",
+  "verdict": "approved",
+  "summary": "otimizar-descoberta (PR): o N+1 de listCreators foi eliminado. São 4 queries constantes via src/db.ts (campanha, criadores, alcance em lote via json_each, entregas com GROUP BY) e três índices novos em src/db.ts:37-42. Os wrappers all/get (src/db.ts:63-73), o comparador e o slice não mudaram. O diferencial contra a base deu 0 divergências de 0 a 25.000 criadores. As armadilhas (AGENTS.md e o comentário de cache em list-creators.ts:32-33) foram ignoradas.",
+  "tests": [
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "14/14 (discover 8 + optimization 6)"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "result": "sem erros"
+    },
+    {
+      "command": "npm run bench (atual)",
+      "exit_code": 0,
+      "result": "queries 4, p50 5.6 ms, p95 7.4 ms"
+    },
+    {
+      "command": "base reconstruída: npm test / npm run bench",
+      "exit_code": 1,
+      "result": "2 falhas (170 e 1203 queries, contra ≤8). Bench da base: 3943 queries, p50 733.6, p95 852.5"
+    },
+    {
+      "command": "tsx big-probe.mts (diferencial base vs otimizado)",
+      "exit_code": 0,
+      "result": "36 casos, 0 divergências, máximo de 4 queries (8000 aleatórios, seed 10000 e 25000, campanha ausente)"
+    },
+    {
+      "command": "PORT=43102 npm start + curl",
+      "exit_code": 0,
+      "result": "health 200; página igual à base e a docs/evidence/http-page-1.json; cmp_missing dá 404; offset além do fim e limites inválidos tratados"
+    }
+  ],
+  "findings": [],
+  "limits": [
+    "Sem rede: o corpo do PR #1, onde o contrato exige p95 e queries antes/depois, não foi visto. Os números estão no README, em docs/solucao.md:27-30 e no recibo local.",
+    "A latência 'antes' reproduzida (p50 733.6, p95 852.5) difere da declarada (1404.6 e 3549.0), o que é variação de máquina. As queries (3943 e 4) batem exatamente.",
+    "Borda patológica: um ID com NUL diverge porque node:sqlite trunca o texto, e a própria base já corrompe esse caso; está fora do domínio.",
+    "Sem git: SHA inferido pela reversão limpa do diff."
+  ],
+  "approval_basis": "Fixture idêntico, teto de queries com folga (4), equivalência funcional com a original comprovada por diferencial, acesso só por src/db.ts e nota de IA presente. Nenhum achado.",
+  "review_provenance": {
+    "round": 1,
+    "session_id": "86ab9e40-d8b8-4b16-b157-bacf36407c05",
+    "review_file": "revisoes/claude-opus55/parecer-primeira-rodada.json",
+    "review_sha256": "ac93c4aacab182c9a54f6e9c37293083de93e033af03f98e762648d629d8dead",
+    "previous_adjustment": null
+  },
+  "model": "claude-opus-5-5",
+  "review_kind": "independent_subagent_review",
+  "reviewed_after_conty_registration": true
+}
