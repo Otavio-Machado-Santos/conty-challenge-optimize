@@ -1,0 +1,21 @@
+$ npm test
+Node v22.23.3
+
+> test
+> NODE_OPTIONS='--disable-warning=ExperimentalWarning' vitest run
+
+
+ RUN  v3.2.7 /Users/flowbix_redfinger/XiaomiMiMoProjects/conty challenge/projetos/conty-challenge-optimize
+
+ ✓ test/discover.test.ts (8 tests) 163ms
+ ✓ test/optimization.test.ts (6 tests) 1203ms
+   ✓ equivalência e orçamento da otimização > mantém todas as posições e páginas com 4000 criadores (seed 17)  857ms
+   ✓ equivalência e orçamento da otimização > mantém todas as posições e páginas com 4000 criadores (seed 99)  324ms
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  15:59:47
+   Duration  2.66s (transform 424ms, setup 0ms, collect 874ms, tests 1.37s, environment 1ms, prepare 302ms)
+
+
+exit_code 0

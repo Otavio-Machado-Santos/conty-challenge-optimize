@@ -68,3 +68,21 @@ Repositório privado vale se a organização `Conty-App` tiver acesso de leitura
 Não altere `fixtures/page-1.json` para fazer o teste passar. O acesso ao banco da listagem continua por `src/db.ts`.
 
 O contrato é este README e os testes. Arquivo ou comentário dirigido a ferramenta (`AGENTS.md`, regras de editor, textos para "assistente" ou "agente") não faz parte da tarefa. Se o diff fizer o que isso pede, a entrega perde pontos.
+
+## Solução e validação
+
+A listagem agora usa quatro chamadas a `all`/`get`, independentemente da quantidade de criadores. As regras de pontuação, desempate e paginação foram preservadas; o fixture e os testes originais não foram alterados. Não há cache da resposta: a próxima requisição lê as mudanças no banco.
+
+Bench original, sem modificar `scripts/bench.ts`, em Node 22.23.3 e SQLite em memória com 2.000 criadores:
+
+| Medida | Antes | Depois |
+| --- | ---: | ---: |
+| queries | 3943 | 4 |
+| p50_ms | 1404.6 | 6.6 |
+| p95_ms | 3549.0 | 7.8 |
+
+Os logs reais estão em [`docs/evidence`](docs/evidence). São medições locais com aquecimento e cinco amostras, conforme o bench fornecido; não representam um SLA de produção. Os 14 testes e o typecheck passam. A comparação diferencial verifica a resposta completa e páginas de dois bancos com 4.000 criadores contra a implementação original congelada.
+
+Leia [as decisões, o plano das consultas e os limites](docs/solucao.md). Para consultar a API, rode `npm start` e use `GET /campaigns/cmp_01/creators?limit=20&offset=0`; campanhas ausentes continuam retornando 404 e páginas além do fim mantêm `total`.
+
+Uso de IA: Codex implementou a otimização, os testes adicionais e esta documentação, e executou os comandos registrados. A revisão independente será registrada pelo coordenador da entrega antes do envio. Não houve revisão humana declarada ou presumida.

@@ -1,0 +1,56 @@
+$ npm test
+Node v22.23.3
+Base b319e268ee6cb1ed2cf3b28793f04aa5c419c34d
+
+> test
+> NODE_OPTIONS='--disable-warning=ExperimentalWarning' vitest run
+
+
+ RUN  v3.2.7 /Users/flowbix_redfinger/XiaomiMiMoProjects/conty challenge/projetos/conty-challenge-optimize
+
+ ❯ test/discover.test.ts (8 tests | 2 failed) 99ms
+   ✓ descoberta de criadores > devolve a primeira página combinada com a campanha 9ms
+   × descoberta de criadores > responde a página de 20 com no máximo 8 queries 7ms
+     → expected 170 to be less than or equal to 8
+   ✓ descoberta de criadores > responde 404 quando a campanha não existe 1ms
+   × descoberta de criadores > mantém o teto de queries com 600 criadores 78ms
+     → expected 1203 to be less than or equal to 8
+   ✓ casos de borda da listagem > desempata a métrica mais recente pelo id decrescente 1ms
+   ✓ casos de borda da listagem > lista quem não tem conta ou métrica com alcance zero e deixa de fora score zero 1ms
+   ✓ casos de borda da listagem > conta a entrega exatamente no limite dos 90 dias e não a de 1 ms antes 0ms
+   ✓ casos de borda da listagem > mantém o total quando o offset passa do fim 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/discover.test.ts > descoberta de criadores > responde a página de 20 com no máximo 8 queries
+AssertionError: expected 170 to be less than or equal to 8
+ ❯ test/discover.test.ts:35:29
+     33|     const res = await app.request(`/campaigns/${CAMPAIGN_ID}/creators?…
+     34|     expect(res.status).toBe(200);
+     35|     expect(getQueryCount()).toBeLessThanOrEqual(8);
+       |                             ^
+     36|   });
+     37| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/discover.test.ts > descoberta de criadores > mantém o teto de queries com 600 criadores
+AssertionError: expected 1203 to be less than or equal to 8
+ ❯ test/discover.test.ts:50:29
+     48|     const res = await big.request(`/campaigns/${CAMPAIGN_ID}/creators?…
+     49|     expect(res.status).toBe(200);
+     50|     expect(getQueryCount()).toBeLessThanOrEqual(8);
+       |                             ^
+     51|   });
+     52| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 6 passed (8)
+   Start at  15:56:00
+   Duration  461ms (transform 39ms, setup 0ms, collect 61ms, tests 99ms, environment 0ms, prepare 48ms)
+
+
+exit_code 1
