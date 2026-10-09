@@ -85,4 +85,4 @@ Os logs reais estão em [`docs/evidence`](docs/evidence). São medições locais
 
 Leia [as decisões, o plano das consultas e os limites](docs/solucao.md). Para consultar a API, rode `npm start` e use `GET /campaigns/cmp_01/creators?limit=20&offset=0`; campanhas ausentes continuam retornando 404 e páginas além do fim mantêm `total`.
 
-Uso de IA: Codex implementou a otimização, os testes adicionais e esta documentação, e executou os comandos registrados. A revisão independente será registrada pelo coordenador da entrega antes do envio. Não houve revisão humana declarada ou presumida.
+Uso de IA: Codex implementou a otimização, os testes adicionais e esta documentação, e executou os comandos registrados. Dois agentes Codex independentes revisaram o código e executaram testes e sondagens próprias; os pareceres e a validação final estão em [docs/verificacao-final.md](docs/verificacao-final.md). A entrega já foi registrada na Conty, com [recibo](docs/evidence/conty-recibo.json). Não houve revisão humana declarada ou presumida.
