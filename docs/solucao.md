@@ -46,4 +46,12 @@ Os índices aumentam o armazenamento e o custo de escrita do seed. O SQLite cont
 
 Codex implementou o código, escreveu as regressões e a documentação, e executou testes, typecheck, benchmark, auditoria e chamadas HTTP. A evidência contém saídas reais desses comandos. A referência original é uma fonte de comparação; o fato de um teste passar não substitui a revisão independente nem prova um deploy de produção.
 
-O coordenador registrará a revisão por agentes independentes antes de publicar e enviar a entrega. Não há revisão humana ou revisão independente já concluída declarada neste documento.
+Dois agentes Codex independentes do implementador revisaram o código no commit `c474b676e8f4665d34a2785a9ef07cc0a6d00d5e`, executaram testes e sondagens próprias, e aprovaram sem achados funcionais pendentes: [revisão A](reviews/02-a.json) e [revisão B](reviews/02-b.json). Incluíram bancos de 30.000 e 35.000 criadores. O coordenador também validou instalação, testes, typecheck e bench em um checkout isolado do commit: [log](evidence/coordenador-clone-limpo.txt). Não foi realizada revisão humana do código.
+
+## Fluxo real capturado
+
+O portal de evidência executou chamadas HTTP reais à API local: página de 20, página além do fim e campanha ausente. Os três checks passaram; [transcript](evidence/coordenador-http.json), [screenshot com response](evidence/response.jpg) e [gravação GIF](evidence/flow.gif) estão publicados junto desta solução. Dados são sintéticos do seed; não houve deploy de produção. O GIF foi codificado de frames reais de `Page.screencastFrame`, sem montagem.
+
+![Resultado HTTP local](evidence/screen.jpg)
+
+![Fluxo HTTP real](evidence/flow.gif)

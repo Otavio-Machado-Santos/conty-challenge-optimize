@@ -1,0 +1,67 @@
+{
+  "challenge": "02-otimizar-descoberta",
+  "reviewed_sha": "c474b676e8f4665d34a2785a9ef07cc0a6d00d5e",
+  "base_sha": "b319e268ee6cb1ed2cf3b28793f04aa5c419c34d",
+  "reviewer": "Codex independent reviewer B (/root/implementar_origem)",
+  "scope": "Robustez, orçamento constante, equivalência em volume acima do limite de placeholders, bancos esparsos e ausência de cache obsoleto",
+  "runtime": "Node.js v22.23.3",
+  "commands": [
+    {
+      "command": "npm test (PATH do Node 22)",
+      "exit_code": 0,
+      "result": "14/14 testes passam; testes originais e fixture preservados"
+    },
+    {
+      "command": "npm run typecheck (PATH do Node 22)",
+      "exit_code": 0,
+      "result": "tsc --noEmit passa"
+    },
+    {
+      "command": "npm run bench, execução isolada após os checks",
+      "exit_code": 0,
+      "result": { "creators": 2000, "queries": 4, "p50_ms": 7.4, "p95_ms": 8.6 },
+      "note": "Houve também uma primeira execução paralela aos testes/typecheck: 4 consultas, p50 28.3 e p95 96.3 ms, evidenciando interferência de carga local; a tabela acima usa a execução isolada. Não é SLA de produção."
+    },
+    {
+      "command": "node --experimental-strip-types --disable-warning=ExperimentalWarning /tmp/conty-review-02-b.mjs",
+      "exit_code": 0,
+      "result": "6 probes independentes passaram, incluindo comparação de toda a resposta com a referência original em 35000 criadores compatíveis",
+      "probes": [
+        { "case": "Banco sem campanha", "queries": 1, "passed": true },
+        { "case": "Campanha existente, zero criadores", "queries": 2, "passed": true },
+        { "case": "35000 compatíveis, contas esparsas, métricas antigas e empatadas, múltiplas contas, conta órfã/sem métrica e entregas no limite", "queries": 4, "total": 35000, "full_differential_equal": true, "elapsed_ms": 63.72, "passed": true },
+        { "case": "Página além do fim em volume grande conserva total", "queries": 4, "passed": true },
+        { "case": "Atualização de métrica/nome, exclusão de entregas, alteração de nichos da campanha e exclusão da campanha refletem a próxima consulta", "passed": true },
+        { "case": "Campanha sem nichos via handler HTTP em banco com 35001 criadores", "queries": 2, "passed": true }
+      ]
+    },
+    {
+      "command": "git diff --name-only <base>...<sha> -- fixtures/page-1.json test/discover.test.ts scripts/bench.ts src/app.ts",
+      "exit_code": 0,
+      "result": "Saída vazia: contratos originais, normalização HTTP, fixture e bench não foram alterados"
+    },
+    {
+      "command": "git diff --check <base>...<sha> -- src test README.md docs/solucao.md",
+      "exit_code": 0,
+      "result": "Código, testes e documentação autoral sem erros de whitespace"
+    }
+  ],
+  "source_verified": [
+    { "path": "src/list-creators.ts", "lines": "38-46,72-101", "claim": "Todas as leituras continuam nos wrappers all/get de db.ts; 4 consultas, 2 sem compatíveis e 1 sem campanha" },
+    { "path": "src/list-creators.ts", "lines": "69-85,94-100", "claim": "IDs transmitidos por um único parâmetro json_each, evitando limite de placeholders; sem cache de resposta" },
+    { "path": "src/list-creators.ts", "lines": "75-89", "claim": "Última métrica por conta usa captured_at DESC e id DESC; COALESCE para conta vazia e soma em ordem rowid preservam a base" },
+    { "path": "src/db.ts", "lines": "37-42", "claim": "Índices de contas, métricas e intervalo de entregas; projeções não carregam raw_payload" },
+    { "path": "src/list-creators.ts", "lines": "108-112", "claim": "Comparador original e total antes do slice são mantidos" }
+  ],
+  "findings": [],
+  "non_blocking_notes": [
+    {
+      "path": "docs/evidence/before-test.txt",
+      "line": 33,
+      "reproduction": "git diff --check b319e268ee6cb1ed2cf3b28793f04aa5c419c34d...c474b676e8f4665d34a2785a9ef07cc0a6d00d5e",
+      "result": "Exit 2: trailing whitespace na linha de contexto copiada do log real de teste original. Não é defeito funcional e não afeta testes/bench. Caso diff-check global seja um gate da entrega, documente normalização desse log."
+    }
+  ],
+  "verdict": "approved",
+  "limits": "Validação local em SQLite/Node22. Processamento e memória continuam proporcionais ao número de candidatos; o limite constante se refere às consultas de db.ts. Sem deploy ou carga concorrente de produção. Código do desafio não foi editado nesta revisão."
+}
