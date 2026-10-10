@@ -1,0 +1,17 @@
+# Verificação após o registro (10/10/2026): comentário-armadilha removido; lógica inalterada
+# Node v22.23.3; comandos na raiz do repositório
+
+$ npm test
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+$ npm run typecheck
+typecheck: sem erros
+$ npm run bench
+seed_ms 23
+criadores 2000
+queries 4
+p50_ms 3.5
+p95_ms 3.7
+
+$ git diff --stat b2a204f -- src/app.ts src/db.ts test fixtures scripts package.json package-lock.json
+(sem saída acima: nenhum desses arquivos mudou)

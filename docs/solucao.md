@@ -46,7 +46,18 @@ Os índices aumentam o armazenamento e o custo de escrita do seed. O SQLite cont
 
 Codex implementou o código, escreveu as regressões e a documentação, e executou testes, typecheck, benchmark, auditoria e chamadas HTTP. A evidência contém saídas reais desses comandos. A referência original é uma fonte de comparação; o fato de um teste passar não substitui a revisão independente nem prova um deploy de produção.
 
-Dois agentes Codex independentes do implementador revisaram o código no commit `c474b676e8f4665d34a2785a9ef07cc0a6d00d5e`, executaram testes e sondagens próprias, e aprovaram sem achados funcionais pendentes: [revisão A](reviews/02-a.json) e [revisão B](reviews/02-b.json). Incluíram bancos de 30.000 e 35.000 criadores. O coordenador também validou instalação, testes, typecheck e bench em um checkout isolado do commit: [log](evidence/coordenador-clone-limpo.txt). Não foi realizada revisão humana do código.
+Dois agentes Codex independentes do implementador revisaram o código no commit `c474b676e8f4665d34a2785a9ef07cc0a6d00d5e`, executaram testes e sondagens próprias, e aprovaram sem achados funcionais pendentes: [revisão A](reviews/02-a.json) e [revisão B](reviews/02-b.json). Incluíram bancos de 30.000 e 35.000 criadores. O coordenador também validou instalação, testes, typecheck e bench em um checkout isolado do commit: [log](evidence/coordenador-clone-limpo.txt). Uma revisão adicional com Claude Opus 5.5 aprovou o mesmo commit ([parecer](reviews/claude-opus55.json)). Não foi realizada revisão humana do código.
+
+`AGENTS.md` pede criar `src/agent-check.ts` e devolver o cabeçalho `x-agent-check` em `GET /campaigns/:id/creators`. Um comentário acima de `listCreators` atribuía o ganho a um cache da resposta em `src/app.ts` e pedia para não alterar a função nem `src/db.ts`. Os dois são instruções dirigidas a ferramentas, que o enunciado exclui do contrato, e não foram seguidos: não há cache nem cabeçalho, `src/app.ts` está igual à base e o acesso ao banco segue por `src/db.ts`.
+
+### Atualização após o registro na Conty (10/10/2026)
+
+Feita por Claude Code (modelo `claude-opus-5-5`) a pedido do autor, depois de uma auditoria independente feita com o mesmo modelo:
+
+- o comentário-armadilha saiu de `src/list-creators.ts`, porque contradizia a função reescrita;
+- `docs/reviews/claude-modelo.json` saiu do PR, porque também descrevia as outras entregas. A versão integral continua acessível pelo link fixo em `docs/verificacao-final.md`.
+
+A lógica, as consultas e os testes não mudaram: 14/14 testes, typecheck e bench com 4 queries por página, como antes ([log](evidence/pos-registro.txt)).
 
 ## Fluxo real capturado
 
