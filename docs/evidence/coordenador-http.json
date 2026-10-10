@@ -1,0 +1,229 @@
+{
+  "challenge": 2,
+  "started_at": "2026-10-09T19:19:47.044Z",
+  "finished_at": "2026-10-09T19:19:47.094Z",
+  "environment": "macOS, Node22, HTTP loopback, dados sintéticos",
+  "passed": true,
+  "steps": [
+    {
+      "label": "Página de 20 criadores compatíveis",
+      "method": "GET",
+      "path": "/campaigns/cmp_01/creators?limit=20&offset=0",
+      "http_status": 200,
+      "response": {
+        "campaign_id": "cmp_01",
+        "total": 1128,
+        "creators": [
+          {
+            "id": "crt_1065",
+            "name": "Criador 1065",
+            "niche_score": 2,
+            "latest_reach": 198369,
+            "deliveries_90d": 1
+          },
+          {
+            "id": "crt_0132",
+            "name": "Criador 132",
+            "niche_score": 2,
+            "latest_reach": 188116,
+            "deliveries_90d": 1
+          },
+          {
+            "id": "crt_1030",
+            "name": "Criador 1030",
+            "niche_score": 2,
+            "latest_reach": 186229,
+            "deliveries_90d": 0
+          },
+          {
+            "id": "crt_0680",
+            "name": "Criador 680",
+            "niche_score": 2,
+            "latest_reach": 174687,
+            "deliveries_90d": 1
+          },
+          {
+            "id": "crt_0596",
+            "name": "Criador 596",
+            "niche_score": 2,
+            "latest_reach": 160687,
+            "deliveries_90d": 1
+          },
+          {
+            "id": "crt_0573",
+            "name": "Criador 573",
+            "niche_score": 2,
+            "latest_reach": 152245,
+            "deliveries_90d": 2
+          },
+          {
+            "id": "crt_0813",
+            "name": "Criador 813",
+            "niche_score": 2,
+            "latest_reach": 151883,
+            "deliveries_90d": 0
+          },
+          {
+            "id": "crt_0917",
+            "name": "Criador 917",
+            "niche_score": 2,
+            "latest_reach": 151750,
+            "deliveries_90d": 1
+          },
+          {
+            "id": "crt_0140",
+            "name": "Criador 140",
+            "niche_score": 2,
+            "latest_reach": 150898,
+            "deliveries_90d": 0
+          },
+          {
+            "id": "crt_0976",
+            "name": "Criador 976",
+            "niche_score": 2,
+            "latest_reach": 148777,
+            "deliveries_90d": 1
+          },
+          {
+            "id": "crt_0587",
+            "name": "Criador 587",
+            "niche_score": 2,
+            "latest_reach": 143487,
+            "deliveries_90d": 0
+          },
+          {
+            "id": "crt_1552",
+            "name": "Criador 1552",
+            "niche_score": 2,
+            "latest_reach": 139764,
+            "deliveries_90d": 0
+          },
+          {
+            "id": "crt_0155",
+            "name": "Criador 155",
+            "niche_score": 2,
+            "latest_reach": 137332,
+            "deliveries_90d": 3
+          },
+          {
+            "id": "crt_1451",
+            "name": "Criador 1451",
+            "niche_score": 2,
+            "latest_reach": 133679,
+            "deliveries_90d": 0
+          },
+          {
+            "id": "crt_0226",
+            "name": "Criador 226",
+            "niche_score": 2,
+            "latest_reach": 130969,
+            "deliveries_90d": 2
+          },
+          {
+            "id": "crt_1580",
+            "name": "Criador 1580",
+            "niche_score": 2,
+            "latest_reach": 127157,
+            "deliveries_90d": 0
+          },
+          {
+            "id": "crt_0820",
+            "name": "Criador 820",
+            "niche_score": 2,
+            "latest_reach": 125449,
+            "deliveries_90d": 1
+          },
+          {
+            "id": "crt_1876",
+            "name": "Criador 1876",
+            "niche_score": 2,
+            "latest_reach": 123226,
+            "deliveries_90d": 3
+          },
+          {
+            "id": "crt_0206",
+            "name": "Criador 206",
+            "niche_score": 2,
+            "latest_reach": 123024,
+            "deliveries_90d": 1
+          },
+          {
+            "id": "crt_0586",
+            "name": "Criador 586",
+            "niche_score": 2,
+            "latest_reach": 121437,
+            "deliveries_90d": 3
+          }
+        ]
+      },
+      "checks": [
+        {
+          "field": "campaign_id",
+          "expected": "cmp_01",
+          "actual": "cmp_01",
+          "passed": true
+        },
+        {
+          "field": "total",
+          "expected": 1128,
+          "actual": 1128,
+          "passed": true
+        },
+        {
+          "field": "creators.length",
+          "expected": 20,
+          "actual": 20,
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "duration_ms": 19
+    },
+    {
+      "label": "Página além do fim mantém o total e retorna lista vazia",
+      "method": "GET",
+      "path": "/campaigns/cmp_01/creators?limit=20&offset=10000",
+      "http_status": 200,
+      "response": {
+        "campaign_id": "cmp_01",
+        "total": 1128,
+        "creators": []
+      },
+      "checks": [
+        {
+          "field": "total",
+          "expected": 1128,
+          "actual": 1128,
+          "passed": true
+        },
+        {
+          "field": "creators.length",
+          "expected": 0,
+          "actual": 0,
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "duration_ms": 20
+    },
+    {
+      "label": "Campanha inexistente retorna 404",
+      "method": "GET",
+      "path": "/campaigns/missing/creators",
+      "http_status": 404,
+      "response": {
+        "error": "campanha não encontrada"
+      },
+      "checks": [
+        {
+          "field": "error",
+          "expected": "campanha não encontrada",
+          "actual": "campanha não encontrada",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "duration_ms": 10
+    }
+  ]
+}

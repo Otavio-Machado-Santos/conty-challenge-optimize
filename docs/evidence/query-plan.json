@@ -1,0 +1,81 @@
+{
+  "runtime": "v22.23.3",
+  "plans": [
+    {
+      "sql": "SELECT accounts.creator_id,\n              COALESCE((\n                SELECT metrics.views\n                FROM metrics\n                WHERE metrics.account_id = accounts.id\n                ORDER BY metrics.captured_at DESC, metrics.id DESC\n                LIMIT 1\n              ), 0) AS views\n       FROM social_accounts AS accounts\n       WHERE accounts.creator_id IN (SELECT value FROM json_each(?))\n       ORDER BY accounts.rowid",
+      "plan": [
+        {
+          "id": 4,
+          "parent": 0,
+          "notused": 108,
+          "detail": "SEARCH accounts USING INDEX social_accounts_by_creator (creator_id=?)"
+        },
+        {
+          "id": 8,
+          "parent": 0,
+          "notused": 0,
+          "detail": "LIST SUBQUERY 2"
+        },
+        {
+          "id": 11,
+          "parent": 8,
+          "notused": 0,
+          "detail": "SCAN json_each VIRTUAL TABLE INDEX 1:"
+        },
+        {
+          "id": 20,
+          "parent": 8,
+          "notused": 0,
+          "detail": "CREATE BLOOM FILTER"
+        },
+        {
+          "id": 32,
+          "parent": 0,
+          "notused": 0,
+          "detail": "CORRELATED SCALAR SUBQUERY 1"
+        },
+        {
+          "id": 37,
+          "parent": 32,
+          "notused": 55,
+          "detail": "SEARCH metrics USING COVERING INDEX metrics_latest_by_account (account_id=?)"
+        },
+        {
+          "id": 54,
+          "parent": 0,
+          "notused": 0,
+          "detail": "USE TEMP B-TREE FOR ORDER BY"
+        }
+      ]
+    },
+    {
+      "sql": "SELECT creator_id, COUNT(*) AS n\n       FROM deliveries\n       WHERE creator_id IN (SELECT value FROM json_each(?))\n         AND delivered_at >= ?\n       GROUP BY creator_id",
+      "plan": [
+        {
+          "id": 6,
+          "parent": 0,
+          "notused": 93,
+          "detail": "SEARCH deliveries USING COVERING INDEX deliveries_by_creator_date (creator_id=? AND delivered_at>?)"
+        },
+        {
+          "id": 10,
+          "parent": 0,
+          "notused": 0,
+          "detail": "LIST SUBQUERY 1"
+        },
+        {
+          "id": 13,
+          "parent": 10,
+          "notused": 0,
+          "detail": "SCAN json_each VIRTUAL TABLE INDEX 1:"
+        },
+        {
+          "id": 22,
+          "parent": 10,
+          "notused": 0,
+          "detail": "CREATE BLOOM FILTER"
+        }
+      ]
+    }
+  ]
+}

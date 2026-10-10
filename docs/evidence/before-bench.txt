@@ -1,0 +1,14 @@
+$ npm run bench
+Node v22.23.3
+Base b319e268ee6cb1ed2cf3b28793f04aa5c419c34d
+
+> bench
+> NODE_OPTIONS='--disable-warning=ExperimentalWarning' tsx scripts/bench.ts
+
+seed_ms 28
+criadores 2000
+queries 3943
+p50_ms 1404.6
+p95_ms 3549.0
+
+exit_code 0

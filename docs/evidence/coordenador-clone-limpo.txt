@@ -1,0 +1,56 @@
+$ node --version
+v22.23.3
+
+$ npm ci
+
+added 57 packages, and audited 58 packages in 2s
+
+15 packages are looking for funding
+  run `npm fund` for details
+
+3 vulnerabilities (1 moderate, 2 critical)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+npm warn install-scripts 2 packages have install scripts not yet covered by allowScripts:
+npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+npm warn install-scripts   fsevents@2.3.3 (install: (install scripts present))
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+
+$ npm test
+
+> test
+> NODE_OPTIONS='--disable-warning=ExperimentalWarning' vitest run
+
+
+ RUN  v3.2.7 /private/var/folders/1h/dnd2dd992cq41yhypgy46_bc0000gn/T/conty-clean-02-2nzz1eik
+
+ ✓ test/discover.test.ts (8 tests) 35ms
+ ✓ test/optimization.test.ts (6 tests) 501ms
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  16:12:33
+   Duration  954ms (transform 79ms, setup 0ms, collect 146ms, tests 536ms, environment 0ms, prepare 161ms)
+
+
+$ npm run typecheck
+
+> typecheck
+> tsc --noEmit
+
+
+$ npm run bench
+
+> bench
+> NODE_OPTIONS='--disable-warning=ExperimentalWarning' tsx scripts/bench.ts
+
+seed_ms 33
+criadores 2000
+queries 4
+p50_ms 5.7
+p95_ms 6.2
+

@@ -1,0 +1,130 @@
+{
+  "challenge": 2,
+  "axis": "spec",
+  "reviewed_sha": "c474b676e8f4665d34a2785a9ef07cc0a6d00d5e",
+  "baseline_sha": "b319e268ee6cb1ed2cf3b28793f04aa5c419c34d",
+  "reviewer": "/root/implementar_repasses (Codex; independente do implementador 2)",
+  "reviewed_at": "2026-10-09T19:08:06.239534+00:00",
+  "environment": {
+    "node": "v22.23.3",
+    "database": "SQLite em memória",
+    "deployment": "validação local"
+  },
+  "commands_results": [
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "result": "14/14 testes passaram, incluindo 8 originais",
+      "stdout": "\n> test\n> NODE_OPTIONS='--disable-warning=ExperimentalWarning' vitest run\n\n\n RUN  v3.2.7 /Users/flowbix_redfinger/XiaomiMiMoProjects/conty challenge/projetos/conty-challenge-optimize\n\n ✓ test/discover.test.ts (8 tests) 29ms\n ✓ test/optimization.test.ts (6 tests) 429ms\n\n Test Files  2 passed (2)\n      Tests  14 passed (14)\n   Start at  16:04:16\n   Duration  839ms (transform 76ms, setup 0ms, collect 139ms, tests 458ms, environment 0ms, prepare 132ms)\n\n"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "result": "tsc --noEmit passou"
+    },
+    {
+      "command": "npm run bench",
+      "exit_code": 0,
+      "result": {
+        "creators": 2000,
+        "queries": 4,
+        "p50_ms": 6.1,
+        "p95_ms": 7.2
+      },
+      "stdout": "\n> bench\n> NODE_OPTIONS='--disable-warning=ExperimentalWarning' tsx scripts/bench.ts\n\nseed_ms 31\ncriadores 2000\nqueries 4\np50_ms 6.1\np95_ms 7.2\n"
+    },
+    {
+      "command": "node node_modules/tsx/dist/cli.mjs /tmp/conty-review-02-a/review.ts",
+      "exit_code": 0,
+      "result": {
+        "independently_written_oracle": true,
+        "frozen_reference_from_git": true,
+        "randomized_seeds": [
+          1,
+          13,
+          917,
+          2041,
+          65535
+        ],
+        "random_creators": 900,
+        "http_pages_verified": 50,
+        "randomized_cases_passed": 5,
+        "exact_metric_id_tie_sqlite_binary": "Unicode suplementar vence BMP no mesmo captured_at; alcance esperado100 confirmado",
+        "inclusive_90_day_boundary": "limite entra; 1ms anterior fica fora; datas posteriores entram conforme contrato",
+        "bank_mutation_without_cache": "campanha e nome alterados são refletidos",
+        "large_volumes": [
+          {
+            "creators": 6000,
+            "queries": 4,
+            "final_page_items": 10,
+            "beyond_end_items": 0,
+            "same_as_original": true
+          },
+          {
+            "creators": 30000,
+            "queries": 4,
+            "final_page_items": 10,
+            "beyond_end_items": 0,
+            "same_as_original": true
+          }
+        ]
+      }
+    },
+    {
+      "command": "git diff --exit-code BASE SHA -- fixtures/page-1.json test/discover.test.ts scripts/bench.ts src/app.ts AGENTS.md",
+      "exit_code": 0,
+      "result": "arquivos protegidos e normalização HTTP preservados byte a byte"
+    },
+    {
+      "command": "git status --porcelain; git rev-parse HEAD; git diff --check",
+      "exit_code": 0,
+      "result": "tree limpo, SHA permaneceu fixo, nenhum erro de whitespace"
+    }
+  ],
+  "static_checks": [
+    {
+      "file": "src/list-creators.ts",
+      "lines": [
+        38,
+        46,
+        72,
+        92
+      ],
+      "proof": "Todas as quatro consultas usam get/all de src/db.ts; nenhuma leitura direta ou cache."
+    },
+    {
+      "file": "src/list-creators.ts",
+      "lines": [
+        24,
+        29,
+        79,
+        97,
+        108,
+        112
+      ],
+      "proof": "Comparador JS original, latest captured_at/id DESC, limite delivered_at >=, total antes do slice."
+    },
+    {
+      "file": "src/db.ts",
+      "lines": [
+        37,
+        42,
+        63,
+        72
+      ],
+      "proof": "Mudança apenas adiciona índices; wrappers e contador de queries preservados."
+    }
+  ],
+  "findings": [],
+  "verdict": "approved",
+  "limitations": [
+    "Contagem constante de consultas não implica custo total constante; candidatos são materializados e ordenados em memória, conforme docs.",
+    "Percentis reproduzidos variam com carga e ambiente; não são SLA.",
+    "Esta revisão verifica código no SHA declarado. Evidências visuais e recibo de envio serão verificados pelo coordenador."
+  ],
+  "repository_mutated_by_reviewer": false,
+  "independent_case_artifacts": [
+    "revisoes/support/02-a-independent-cases.ts",
+    "revisoes/support/baseline.ts"
+  ]
+}

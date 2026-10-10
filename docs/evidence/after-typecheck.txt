@@ -1,0 +1,8 @@
+$ npm run typecheck
+Node v22.23.3
+
+> typecheck
+> tsc --noEmit
+
+
+exit_code 0
